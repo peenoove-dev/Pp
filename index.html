@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>หมอนปักใต้</title>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Kanit',sans-serif;}
+
+body{
+height:100vh;
+overflow:hidden;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(to top,#0077be,#00c6ff 60%,#87ceeb);
+position:relative;
+color:white;
+}
+
+/* ทะเล */
+.sea{
+position:absolute;
+bottom:0;
+width:100%;
+height:40%;
+background:linear-gradient(to top,#004e92,#000428);
+overflow:hidden;
+}
+.wave{
+position:absolute;
+width:200%;
+height:100px;
+background:rgba(255,255,255,0.3);
+border-radius:40%;
+animation:waveMove 6s infinite linear;
+bottom:0;
+}
+@keyframes waveMove{
+from{transform:translateX(0);}
+to{transform:translateX(-50%);}
+}
+
+/* กล่องกระจก */
+.glass{
+position:relative;
+z-index:2;
+backdrop-filter:blur(15px);
+background:rgba(255,255,255,0.2);
+padding:30px;
+border-radius:25px;
+box-shadow:0 15px 40px rgba(0,0,0,0.4);
+text-align:center;
+width:90%;
+max-width:500px;
+}
+
+h1{margin-bottom:15px;font-size:30px;}
+p{font-size:14px;margin:10px 0;line-height:1.6;}
+
+button{
+margin:6px;
+padding:10px 20px;
+border:none;
+border-radius:25px;
+cursor:pointer;
+background:linear-gradient(45deg,#ff4e50,#f9d423);
+color:white;
+transition:0.3s;
+}
+button:hover{transform:scale(1.1);}
+
+.logout{
+background:linear-gradient(45deg,#6a11cb,#2575fc);
+}
+
+input{
+padding:8px;
+border-radius:15px;
+border:none;
+margin:5px;
+}
+
+/* หมอน */
+.pillow{
+width:180px;
+height:130px;
+background:white;
+border-radius:40px;
+margin:15px auto;
+position:relative;
+animation:float 3s infinite ease-in-out;
+box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+@keyframes float{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-15px);}
+}
+.eye{
+width:20px;height:20px;background:black;border-radius:50%;
+position:absolute;top:40px;animation:blink 4s infinite;
+}
+.eye.left{left:50px;}
+.eye.right{right:50px;}
+@keyframes blink{
+0%,95%,100%{height:20px;}
+97%{height:2px;}
+}
+.cheek{
+width:20px;height:12px;background:pink;border-radius:50%;
+position:absolute;top:65px;opacity:0.6;
+}
+.cheek.left{left:30px;}
+.cheek.right{right:30px;}
+.mouth{
+width:40px;height:20px;border-bottom:3px solid black;
+border-radius:0 0 40px 40px;
+position:absolute;bottom:25px;left:50%;
+transform:translateX(-50%);
+}
+
+#mainPage{display:none;}
+#developerPanel{display:none;}
+</style>
+</head>
+
+<body>
+
+<div class="sea">
+<div class="wave"></div>
+</div>
+
+<div class="glass" id="loginPage">
+<h1>หมอนปักใต้ 🌴</h1>
+<button onclick="loginUser()">เข้าสู่ระบบผู้ใช้งาน</button><br>
+<input type="password" id="devPass" placeholder="รหัสผู้พัฒนา">
+<button onclick="loginDev()">เข้าสู่ระบบผู้พัฒนา</button>
+</div>
+
+<div class="glass" id="mainPage">
+<h1>หมอนปักใต้ 🌊</h1>
+
+<div class="pillow">
+<div class="eye left"></div>
+<div class="eye right"></div>
+<div class="cheek left"></div>
+<div class="cheek right"></div>
+<div class="mouth"></div>
+</div>
+
+<p>
+หมอนปักใต้ เป็นแนวคิดหมอนอัจฉริยะที่ได้รับแรงบันดาลใจจากเอกลักษณ์ของภาคใต้  
+สามารถปลุกด้วยเสียง ส่งเสียงพูดได้ และเชื่อมต่อมือถือเพื่อควบคุมการทำงาน  
+สะท้อนวัฒนธรรมและความสนุกสนานของคนใต้
+</p>
+
+<button onclick="playSound(0)">เสียงปกติ</button>
+<button onclick="playSound(1)">เสียงปลุกตลกๆ</button>
+<button onclick="playSound(2)">เสียงใต้กวนๆ</button>
+
+<br>
+<button class="logout" onclick="logout()">ออกจากระบบ</button>
+
+<div id="developerPanel">
+<h3>เพิ่มไฟล์เสียง</h3>
+<input type="file" id="audioUpload" accept="audio/*">
+<button onclick="addAudio()">เพิ่มเสียง</button>
+</div>
+
+</div>
+
+<script>
+let sounds=[
+new Audio("เบียว.mp3"),
+new Audio("เบียว.mp3"),
+new Audio("เบียว.mp3")
+];
+
+function loginUser(){
+document.getElementById("loginPage").style.display="none";
+document.getElementById("mainPage").style.display="block";
+}
+
+function loginDev(){
+let pass=document.getElementById("devPass").value;
+if(pass==="2204"){
+document.getElementById("loginPage").style.display="none";
+document.getElementById("mainPage").style.display="block";
+document.getElementById("developerPanel").style.display="block";
+alert("เข้าสู่ระบบผู้พัฒนาเรียบร้อย");
+}else{
+alert("รหัสไม่ถูกต้อง");
+}
+}
+
+function logout(){
+document.getElementById("mainPage").style.display="none";
+document.getElementById("loginPage").style.display="block";
+document.getElementById("developerPanel").style.display="none";
+document.getElementById("devPass").value="";
+}
+
+function playSound(i){
+if(sounds[i]) sounds[i].play();
+}
+
+function addAudio(){
+let file=document.getElementById("audioUpload").files[0];
+if(file){
+let url=URL.createObjectURL(file);
+sounds.push(new Audio(url));
+alert("เพิ่มเสียงสำเร็จ!");
+}
+}
+</script>
+
+</body>
+</html>
